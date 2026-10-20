@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MindBridge: wireframes navegáveis</title>
+<style>
+:root{--bg:#f4f4f5;--sf:#fff;--fg:#1f2937;--mu:#4b5563;--ln:#9ca3af;--ac:#1d5fd1;--ok:#e5e7eb;--rd:#b91c1c;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111827;--sf:#1f2937;--fg:#f3f4f6;--mu:#d1d5db;--ln:#6b7280;--ac:#8db4ff;--ok:#374151;--rd:#fca5a5}}
+:root[data-theme="dark"]{--bg:#111827;--sf:#1f2937;--fg:#f3f4f6;--mu:#d1d5db;--ln:#6b7280;--ac:#8db4ff;--ok:#374151;--rd:#fca5a5}
+html,body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+.m{max-width:390px;margin:8px auto;padding:0 8px;font-size:14px}.m a{color:var(--ac)}summary{min-height:44px;cursor:pointer;display:flex;align-items:center}
+.ph{max-width:390px;margin:8px auto;background:var(--sf);border:2px solid var(--ln);border-radius:20px;min-height:740px;display:flex;flex-direction:column;overflow:hidden}
+.bar{display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid var(--ln)}.bar b{flex:1;font-size:16px}
+.c{padding:16px;display:flex;flex-direction:column;gap:12px;flex:1}
+h1,h2,p{margin:0}h2{font-size:20px}
+.b{display:flex;align-items:center;justify-content:center;min-height:48px;padding:0 14px;border:2px solid var(--ac);border-radius:8px;color:var(--ac);text-decoration:none;font-weight:600;text-align:center;background:none;font-size:16px;font-family:inherit}
+.p{background:var(--ac);color:var(--sf)}.g{border-color:transparent}.h{border-color:var(--rd);color:var(--rd);font-size:13px;padding:0 8px}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--fg);outline-offset:2px}
+label{display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--mu)}
+input:not([type=checkbox]):not([type=radio]):not([type=range]),textarea{min-height:48px;border:2px solid var(--ln);border-radius:8px;padding:0 10px;font:16px inherit;background:var(--sf);color:var(--fg)}textarea{min-height:80px;padding:10px}
+.card{display:block;border:2px solid var(--ln);border-radius:10px;padding:12px;color:inherit;text-decoration:none}
+.av{width:48px;height:48px;border:2px dashed var(--ln);border-radius:50%;flex:none}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.row>.grow{flex:1}
+.chip{padding:8px 14px;border:2px solid var(--ln);border-radius:20px;min-height:44px;background:none;color:var(--fg);font:inherit;display:flex;align-items:center;text-decoration:none}
+.on{border-color:var(--ac);background:var(--ok)}
+.nav{display:flex;border-top:1px solid var(--ln);margin-top:auto}.nav a{flex:1;min-height:56px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--mu);text-decoration:none;text-align:center}.nav a.on{color:var(--ac);font-weight:700;background:none}
+.sw{flex-direction:row;align-items:center;gap:10px;color:var(--fg);min-height:48px;font-size:16px}input[type=checkbox],input[type=radio]{width:24px;height:24px;flex:none}
+.circ{width:180px;height:180px;border:3px solid var(--ac);border-radius:50%;margin:16px auto;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:24px}
+.warn{border:2px dashed var(--ln);padding:10px;border-radius:8px;font-size:14px}.mu{color:var(--mu);font-size:14px}
+.bot{position:sticky;bottom:0;background:var(--sf);border-top:1px solid var(--ln);padding:10px 16px;display:flex;gap:10px;align-items:center}.bot .b{flex:1}
+</style>
+</head>
+<body>
+<div class="m"><b>MindBridge · wireframes navegáveis</b> (telas simuladas, em escala de cinza)
+<details><summary>Mapa das telas</summary><ol id="idx"></ol></details></div>
+<main class="ph" id="ph" tabindex="-1"></main>
+<script>
+const A=(to,t,c='')=>`<a class="b ${c}" href="#${to}">${t}</a>`;
+const H=(t,b)=>`<div class="bar">${b?`<a class="b g" href="#${b}">‹ Voltar</a>`:''}<b>${t}</b><a class="b h" href="#w09">Preciso de ajuda</a></div>`;
+const F=(l,ph,t='text')=>`<label>${l}<input type="${t}" placeholder="${ph}"></label>`;
+const S=(l,on,d)=>`<label class="sw"><input type="checkbox" ${on?'checked':''} ${d?'disabled':''}>${l}</label>`;
+const R=(l,n='r')=>`<label class="card sw"><input type="radio" name="${n}">${l}</label>`;
+const CH=(a,i=-1)=>`<div class="row">${a.map((x,k)=>`<button type="button" class="chip ${k==i?'on':''}" aria-pressed="${k==i}">${x}</button>`).join('')}</div>`;
+const N=a=>`<nav class="nav" aria-label="Principal">${[['w03','Início'],['w04','Profissionais'],['w07','Bem-estar'],['w11','Comunidade'],['w10','Perfil']].map(([t,l])=>`<a href="#${t}" class="${t==a?'on':''}" ${t==a?'aria-current="page"':''}>${l}</a>`).join('')}</nav>`;
+const C=x=>`<div class="c">${x}</div>`;
+const PRO=(n,v)=>`<a class="card row" href="#w05" style="flex-wrap:nowrap"><span class="av"></span><span><b>${n}</b> · Psicóloga · Verificada<br><span class="mu">${v}</span></span></a>`;
+const SC={
+w01a:['W01A Cadastro',H('Criar conta')+C(`<h2>Bem-vindo(a)</h2><p class="mu">Crie sua conta em poucos passos. Você pode usar um apelido.</p>${F('Como quer ser chamado(a)?','Seu apelido (não precisa ser seu nome)')}${F('E-mail','nome@exemplo.com','email')}${F('Senha','Mínimo de 8 caracteres','password')}${A('w01b','Continuar','p')}<p class="mu" style="text-align:center">ou</p>${A('w01b','Continuar com Google')}${A('w03','Já tenho conta. Entrar','g')}`)],
+w01b:['W01B Consentimento',H('Passo 2 de 2','w01a')+C(`<h2>Seus dados, suas regras</h2><div class="card"><ul style="margin:0;padding-left:18px"><li>Usamos seus dados só para personalizar o app.</li><li>Você pode apagar tudo quando quiser.</li><li>Nunca vendemos suas informações.</li></ul><a href="#w01b">Ler versão completa</a></div>${S('Usar meus dados para personalizar o app (necessário)',1,1)}${S('Receber lembretes gentis')}${S('Participar de pesquisas anônimas')}<div class="warn">O MindBridge apoia, mas não substitui atendimento de emergência. Em crise, ligue 188 (CVV) ou 192 (SAMU). <a href="#w09">Ver ajuda</a></div>${S('Li e entendi como meus dados são usados')}${A('w02','Criar minha conta','p')}`)],
+w02:['W02 Questionário',H('Pergunta 2 de 8','w01b')+C(`<progress value="2" max="8" style="width:100%" aria-label="Pergunta 2 de 8"></progress><h2>Como você tem se sentido nas últimas semanas?</h2><p class="mu">Pode pular se preferir. Escolha uma opção.</p>${R('Mais ansioso(a) que o normal')}${R('Sem energia')}${R('Sobrecarregado(a)')}${R('Estou bem e quero me cuidar')}<details><summary>Por que perguntamos isso?</summary><p class="mu">Usamos sua resposta para sugerir profissionais e conteúdos.</p></details><div class="row">${A('w03','Pular','grow')}${A('w03','Continuar','p grow')}</div>${A('w03','Pausar e continuar depois','g')}`)],
+w03:['W03 Home',H('Olá, Lucas')+C(`<div class="card"><h2>Como você está hoje?</h2><div class="row">${['Muito mal','Mal','Mais ou menos','Bem','Muito bem'].map(x=>`<a class="chip" href="#w07">${x}</a>`).join('')}</div></div><div class="card"><b>Próxima consulta</b><p class="mu">Você ainda não tem consulta marcada.</p>${A('w04','Encontrar profissional')}</div><div class="row">${A('w08a','Respirar agora · 3 min','grow')}${A('w07','Ver meu histórico','grow')}</div><a class="card" href="#w11"><b>Para você</b><br>Como lidar com a sobrecarga</a>`)+N('w03')],
+w04:['W04 Profissionais',H('Profissionais')+C(`${F('Buscar','Buscar por nome ou especialidade','search')}${CH(['Preço','Horário','Abordagem','Modalidade'])}<p class="mu">12 profissionais · Ordenar: Mais compatíveis</p>${PRO('Dra. Ana Lima','A partir de R$ 80 · Próxima vaga: amanhã, 18h')}${PRO('Dr. Pedro Souza','A partir de R$ 100 · Próxima vaga: sexta, 9h')}${PRO('Dra. Clara Reis','Valor social · Próxima vaga: terça, 14h')}`)+N('w04')],
+w05:['W05 Perfil',H('Perfil','w04')+C(`<div class="row"><span class="av"></span><div><b>Dra. Ana Lima</b><br>Psicóloga · <span class="mu">Registro verificado (CRP 00/00000)</span></div></div><p>Atende famílias atípicas, adultos e jovens. Abordagem: terapia cognitivo-comportamental.</p><div class="card">Sessão de 50 min · Vídeo, voz ou chat · R$ 120 · Valor social disponível</div><div class="card"><b>4,8 de 5 · 32 avaliações</b><p class="mu">Avaliações de quem já consultou.</p></div>`)+`<div class="bot"><b>R$ 120</b>${A('w06a','Agendar consulta','p')}</div>`],
+w06a:['W06A Agendar',H('Agendar com Dra. Ana','w05')+C(`${CH(['Vídeo','Voz','Chat'],0)}<div class="row">${['Seg 21','Ter 22','Qua 23'].map((d,i)=>`<button type="button" class="chip ${i==1?'on':''}">${d}</button>`).join('')}<button type="button" class="chip" disabled>Qui · Sem vagas</button></div>${CH(['09:00','14:00','18:30'],1)}<p class="mu">Horários no fuso de Brasília</p><div class="card">Ter, 22 de out. · 14:00 · Vídeo · R$ 120</div>${A('w06b','Confirmar agendamento','p')}`)],
+w06b:['W06B Confirmação',H('Consulta agendada')+C(`<h2>Tudo certo!</h2><div class="card">Ter, 22 de out. · 14:00 · Vídeo com Dra. Ana Lima</div>${S('Lembrar 24 h antes',1)}${S('Lembrar 1 h antes',1)}${A('w06b','Adicionar ao calendário')}${A('w03','Voltar ao início','p')}`)],
+w07:['W07 Humor e estresse',H('Como você está?','w03')+C(`<fieldset class="row" style="border:0;padding:0"><legend class="mu">Humor</legend>${['Muito mal','Mal','Mais ou menos','Bem','Muito bem'].map(x=>R(x,'h').replace('card sw','chip sw')).join('')}</fieldset><label>Estresse: de 0 (nenhum) a 10 (muito alto)<input type="range" min="0" max="10" value="5" style="min-height:48px"></label><p class="mu">Fatores (até 5)</p>${CH(['Sono','Trabalho ou estudos','Família','Saúde','Dinheiro','Outro'],0)}<label>Quer anotar algo? (opcional)<textarea placeholder="O que está pesando hoje?" maxlength="280"></textarea></label>${A('w03','Salvar registro','p')}${A('w08a','Quer respirar por 3 minutos? Respirar agora')}`)+N('w07')],
+w08a:['W08A Respirar',H('Respirar','w03')+C(`${CH(['1 min','3 min','5 min'],1)}${['Respiração 4-4|Inspire 4 s, expire 4 s','Respiração 4-7-8|Inspire 4 s, segure 7 s, expire 8 s','Respiração quadrada|Quatro fases de 4 s'].map(x=>{const[a,b]=x.split('|');return `<a class="card" href="#w08b"><b>${a}</b><br><span class="mu">${b}</span></a>`}).join('')}`)],
+w08b:['W08B Prática',H('Respirando','w08a')+C(`<div class="circ" role="status"><b>Inspire</b><span>4</span></div><div class="row">${A('w08b','Pausar','grow')}${A('w08a','Encerrar','grow')}</div>${S('Som suave')}${S('Vibração')}${A('w03','Concluir','p')}`)],
+w09:['W09 Ajuda em crise',`<div class="bar"><b>Ajuda agora</b><a class="b g" href="#back">✕ Fechar</a></div>`+C(`<h2>Você não está sozinho(a)</h2><div class="card"><b>CVV · 188</b><p class="mu">Apoio emocional, 24 horas</p><a class="b p" href="tel:188">Ligar agora</a></div><div class="card"><b>SAMU · 192</b><p class="mu">Risco imediato à vida</p><a class="b p" href="tel:192">Ligar agora</a></div><div class="card"><b>Meus contatos de confiança</b><p class="mu">Pessoa de confiança · Ligar</p>${A('w09','Adicionar contato')}</div><div class="card"><b>Meu plano de segurança</b><ol class="mu"><li>Respirar por 3 minutos</li><li>Ligar para alguém de confiança</li></ol><a href="#w09">Editar meu plano</a></div><p class="warn">O MindBridge não substitui atendimento de emergência.</p><a class="b" href="#back">Voltar ao app</a>`)],
+w10:['W10 Ajustes',H('Ajustes','w03')+C(`<b>Leitura</b>${CH(['Normal','Grande','Muito grande'],0)}<div class="card" style="font-size:20px">Assim o texto vai aparecer para você.</div>${S('Alto contraste')}<b>Conforto</b>${S('Modo calmo: menos movimento e sem sons')}<b>Discrição</b>${S('Aplicativo discreto: ícone e nome neutros')}${CH(['Bloco de notas','Calculadora','Agenda'],0)}${S('Ocultar o conteúdo das notificações')}${A('w10','Restaurar padrões','g')}`)+N('w10')],
+w11:['W11 Grupo da comunidade',H('Famílias atípicas','w03')+C(`<div class="warn">Aqui todo mundo é acolhido. Grupo moderado. <a href="#w11">Ver regras</a></div><div class="card"><p class="mu">Publicando como Folha-Azul-27</p><label>Sua mensagem<textarea placeholder="Compartilhe o que quiser, no seu tempo" maxlength="500"></textarea></label><br>${A('w11','Publicar','p')}</div>${['Hoje foi difícil, mas consegui um tempo para mim.|há 2 h','Alguém tem dicas para organizar a rotina de terapias?|há 5 h'].map((x,i)=>{const[a,b]=x.split('|');return `<div class="card"><b>Estrela-Verde-${10+i}</b> <span class="mu">${b}</span><p>${a}</p><div class="row">${A('w11','Estou com você','grow')}${A('w11','Responder','grow')}</div><details><summary>Mais opções</summary><div class="row">${A('w11','Denunciar')}${A('w11','Bloquear')}</div></details></div>`}).join('')}`)+N('w11')]
+};
+const ph=document.getElementById('ph');
+document.getElementById('idx').innerHTML=Object.entries(SC).map(([k,v])=>`<li><a href="#${k}">${v[0]}</a></li>`).join('');
+function go(){const k=location.hash.slice(1);const s=SC[k]||SC.w01a;ph.innerHTML=s[1];document.title='MindBridge · '+s[0];ph.scrollTop=0;window.scrollTo(0,0);}
+addEventListener('hashchange',go);
+addEventListener('click',e=>{if(e.target.closest('a[href="#back"]')){e.preventDefault();history.back()}});
+go();
+</script>
+</body>
+</html>
